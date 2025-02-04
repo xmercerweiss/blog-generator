@@ -93,4 +93,9 @@ on the server from the script. Below is a table of all needed configuration valu
 
 | Key | Value |
 | - | - |
-| _entry_domain_format_ | The link through which domains will be referenced. e.g. for entries linked at `my.site/blog/1`, `my.site/blog/2`, this would be set to `my.site/blog`|
+| _entry_domain_format_ | The link through which entries will be referenced. E.g. for entries linked at `my.site/blog/1` and `my.site/blog/2`, this would be set to `my.site/blog`|
+| _entry_filename_format_ | Given a markdown file's name, this format sets the name of the HTML file it generates. List `*` in place of the name of the markdown file in this format. For example, to convert `ten` to `number_ten.html`, set this value to `number_*.html`|
+| _index_path_ | The local path to the entry index page. (such as `./blog/index.html`) |
+| _index_template_ | The local path to the template for the entry index page. (such as `./templates/blog_index.html`) |
+| _entry_dest_ | The folder within which entry webpages will be saved. (such as `./blog/entries`) |
+| _entry_template_ | The local path to the template for entry webpages. (such as `/templates/blog_entry.html`)
