@@ -1,12 +1,25 @@
 
 class Converter:
 
-    def __init__(self):
-        pass
-        # Establish blog domain
-        # Establish blog page path
-        # Establish entry output folder
-        # Establish entry output filename format
+    _CONFIG_SEP = "="
+    
+    _DOMAIN_FORMAT_KEY = "entry_domain_format"
+    _INDEX_PATH_KEY = "index_path"
+    _INDEX_TEMP_PATH_KEY = "index_template"
+    _OUTPUT_FORMAT_KEY = "entry_filename_format"
+    _OUTPUT_PATH_KEY = "entry_dest"
+    _OUTPUT_TEMP_PATH_KEY = "entry_template"
+
+    def __init__(self, config_path):
+        _config = self._read_config_file(config_path)
+
+    def _read_config_file(self, path):
+        output = {}
+        with open(path, "r") as file:
+            for line in file.readlines():
+                key, value = line.strip().split(self._CONFIG_SEP)
+                output[key] = value
+        return output
 
     def process(self, markdown_docs):
         for doc in markdown_docs:
