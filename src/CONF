@@ -1,0 +1,6 @@
+entry_domain_format=<www.your.site/blog/>
+entry_filename_format=<number->
+index_path=<local path to entry index page>
+index_template=<local path to index page template>
+entry_dest=<local path to entry folder>
+entry_template=<local path to entry template>

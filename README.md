@@ -1,5 +1,11 @@
 # blog-generator
- A Python script which converts a custom markdown into a valid HTML blog entry.
+ A Python script which converts a custom markdown document into a static HTML blog entry.
+
+ This program is meant to be run locally on your web server in order to generate static
+ HTML content based on a series of mardown documents containing the entry's formatting.
+ It must be provided an HTML template for both your blog index page and each entry's 
+ webpage. The given markdown document is only converted into the HTML content of the
+ entry itself. (i.e. title, paragraphs, etc.)
 
  ## Metadata
  Below is a table of tokens which represent metadata within the defined markdown script.
@@ -29,7 +35,7 @@ to another operation using the nesting operator. (See example page.)
 | Token | Arguments | Operation |
 | - | - | - |
 | #1 through #6 | _text_ | Encloses the given text with HTML tags h1 through h6, respectively |
-| #/ | _text_ | Encloses the given text with an HTML em tag (i.e. italicized) |
+| #/ | _text_ | Italicizes the given text |
 | #* | _text_ | Bolds the given text |
 | #= | _link_, _text_ | Creates an anchor tag with an href of _link_ and contents of _text_ |
 | #+ | __None__ | Opens a new p tag |
@@ -37,7 +43,7 @@ to another operation using the nesting operator. (See example page.)
 | #~ | __None__ | Replaced with an hr tag |
 | #n | __None__ | Replaced with a br tag |
 | ## | __None__ | Comments out the entire line |
-| #& | _operator_, _args_ | The nesting operator. Used to pass the output of an operation as the argument of another operation. |
+| #& | _operator_, _args_ | The nesting operator. Used to pass the output of an operation as the argument of another operation |
 
 ## Example
 Below is an example of the defined markdown script and resulting page contents.
@@ -79,3 +85,12 @@ This document would be converted to the following HTML.
 And is, without CSS, rendered as the following image.
 
 ![image](media/rendered.png)
+
+## Configuration
+The script's CONF file must be set before entries may be generated. It's assumed that the script
+is running directly on your web server, so all "local paths" are the relative paths to the content
+on the server from the script. Below is a table of all needed configuration values.
+
+| Key | Value |
+| - | - |
+| _entry_domain_format_ | The link through which domains will be referenced. e.g. for entries linked at `my.site/blog/1`, `my.site/blog/2`, this would be set to `my.site/blog`|
