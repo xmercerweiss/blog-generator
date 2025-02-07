@@ -4,7 +4,7 @@ import sys
 import converter as conv
 
 
-CONFIG_PATH = "src/CONF"
+CONFIG_PATH = "test/myconf"
 
 NO_INPUT_ERR_MSG = "No input files given"
 INV_INPUT_ERR_MSG = "Invalid filepath given, did you make a typo?"
