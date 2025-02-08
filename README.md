@@ -28,22 +28,32 @@ All dates must be entered in YYYY-MM-dd format.
 Below is a table of tokens which represent operations/formatting within the defined 
 markdown script.
 
-Each operation must be used by beginning a new line with the token followed by a space,
-then space-deliminated arguments. The output of an operation may be given as an argument
-to another operation using the nesting operator. (See example page.)
-
 | Token | Arguments | Operation |
 | - | - | - |
 | #1 through #6 | _text_ | Encloses the given text with HTML tags h1 through h6, respectively |
 | #/ | _text_ | Italicizes the given text |
-| #* | _text_ | Bolds the given text |
+| #_ | _text_ | Bolds the given text |
 | #= | _link_, _text_ | Creates an anchor tag with an href of _link_ and contents of _text_ |
+| #I | _link_, _text_ | Embeds an image into the webpage with _text_ as alt text |
 | #+ | __None__ | Opens a new p tag |
 | #- | __None__ | Closes the last p tag | 
 | #~ | __None__ | Replaced with an hr tag |
 | #n | __None__ | Replaced with a br tag |
 | ## | __None__ | Comments out the entire line |
-| #& | _operator_, _args_ | The nesting operator. Used to pass the output of an operation as the argument of another operation |
+
+Each operation must be used by beginning a new line with the token followed by a space,
+then space-deliminated arguments. Operations may be piped by placing several operators
+together in the order they will be performed.
+
+For instance, the following line...
+```
+#1/ Italic Header!
+```
+
+...will be rendered as...
+```html
+<em><h1>Italic Header!</h1></em>
+```
 
 ## Example
 Below is an example of the defined markdown script and resulting page contents.
@@ -55,7 +65,7 @@ Below is an example of the defined markdown script and resulting page contents.
 #@ Xavier Mercerweiss
 
 #1 #!
-#3 #& #/ #$
+#3/ #$
 #4 Published on #? by #@
 
 #~
