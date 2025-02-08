@@ -1,5 +1,5 @@
 
-class HTMLParser:
+class HTMLRenderer:
 
     _CONTENT_SEP = " "
     _SPECIAL_CHAR = "#"
@@ -25,18 +25,23 @@ class HTMLParser:
             return new
         return replacement
 
-    def _reflect(content):
-        return content
+    def _reflect(self, *content):
+        return self._CONTENT_SEP.join(content)
 
     def to_html(self, path):
         output = []
         lines = self._get_split_lines(path)
         for line in lines:
-            operator, *content = line
-            operation = self._OPERATIONS[operator] if operator in self._OPERATIONS \
-                                                   else self._reflect
-            output.append(operation(*content))
+            rendered = self._evaluate_line(*line)
+            output.append(rendered)
         return "\n".join(output)
+
+    def _evaluate_line(self, *line):
+        operator, *content = line
+        operation = self._OPERATIONS.get(operator, self._reflect)
+        if operation == self._reflect:
+            content = line
+        return operation(*content)
 
     def _get_split_lines(self, path):
         output = []

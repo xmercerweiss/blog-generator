@@ -1,7 +1,7 @@
 import os.path
 import sys
 
-import converter as conv
+import engine 
 
 
 CONFIG_PATH = "test/myconf"
@@ -11,17 +11,17 @@ INV_INPUT_ERR_MSG = "Invalid filepath given, did you make a typo?"
 
 
 def main():
-    app = conv.Converter(CONFIG_PATH)
-    files_in = sys.argv[1:]
-    validate_inputs(files_in)
-    app.process(files_in)
+    app = engine.DocumentEngine(CONFIG_PATH)
+    input_paths = sys.argv[1:]
+    validate_inputs(input_paths)
+    app.process(input_paths)
 
 
-def validate_inputs(filepaths):
-    if len(filepaths) == 0:
+def validate_inputs(paths):
+    if len(paths) == 0:
         raise TypeError(NO_INPUT_ERR_MSG)
-    for f in filepaths:
-        if not os.path.isfile(f):
+    for path in paths:
+        if not os.path.isfile(path):
             raise FileNotFoundError(INV_INPUT_ERR_MSG)
 
 
