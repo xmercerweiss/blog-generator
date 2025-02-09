@@ -1,7 +1,7 @@
  # bloggen
  Short for ___Blog___ ***Gen***erator.
- <hr>
- A Python script which converts a custom markdown document into a static HTML blog entry.
+ 
+ A Python program which converts a custom markdown document into a static HTML blog entry.
 
  This program is meant to be run locally on your web server in order to generate static
  HTML content based on a series of mardown documents containing the entry's formatting.

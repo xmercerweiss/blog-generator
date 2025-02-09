@@ -60,7 +60,7 @@ class HTMLRenderer:
     def _build_linking_func(self, tag, property, is_open=False):
         def linker(text):
             link, *remainder = text.split(self._CONTENT_SEP)
-            content = self._CONTENT_SEP.join(remainder[1:])
+            content = self._CONTENT_SEP.join(remainder)
             if is_open:
                 return f"<{tag} {property}=\"{link}\" alt=\"{content}\">"
             return f"<{tag} {property}=\"{link}\">{content}</{tag}>"
