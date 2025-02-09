@@ -10,7 +10,7 @@
  ## Overview
  This program will generate an index page, listing the titles of each entry in order,
  and generate the webpages for each entry. The index will automatically link to each entry
- from its title. Templates must be given, via the `CONF` file, for both the index and
+ from its title. Templates must be given, via the `main.conf` file, for both the index and
  the entries. (One template will be used by all entries.)
 
  Each template must be a valid HTML document with `#CONTENT#` in place of where the content
@@ -20,12 +20,12 @@
 
  To execute the program, ideally on your webserver through SSH, download this project and call...
  ```bash
- python3 src/main.py <markdown files>
+ python3 main.py <markdown files>
  ```
 
  For instance, to convert all `.blog` files in the current directory, you would call...
  ```bash
- python3 src/main.py ./*.blog
+ python3 main.py ./*.blog
  ```
 
  Please note that you may need to substitute `python3` for the appropriate command for your
@@ -123,7 +123,7 @@ And is, without CSS, rendered as the following image.
 ![image](media/rendered.png)
 
 ## Configuration
-The script's CONF file must be set before entries may be generated. It's assumed that the script
+The script's `main.conf` file must be set before entries may be generated. It's assumed that the script
 is running directly on your web server, so all "local paths" are the relative paths to the content
 on the server from the script. Below is a table of all needed configuration values.
 

@@ -1,5 +1,5 @@
-from documents import HTMLDocument
-import dateutil
+from .documents import HTMLDocument
+from . import dateutil
 
 
 class HTMLRenderer:
@@ -14,10 +14,10 @@ class HTMLRenderer:
     _DATE_KEY = "?"
     _AUTHOR_KEY = "@"
 
-    _INV_OP_ERR_MSG = "{}: Invalid operator \"{}\" provided. Did you make a typo?"
+    _INV_OP_ERR_MSG = "Markdown line {}: Invalid operator \"{}\" provided. Did you make a typo?"
 
-    def __init__(self, date_format):
-        self._current_line = 0
+    def __init__(self, date_format=dateutil.DATE_TO_STR_FMT):
+        self._current_line = None
         self._date_format = date_format
 
         self._OPERATIONS = {
@@ -38,12 +38,12 @@ class HTMLRenderer:
             "~": self._build_replacing_func("<hr>"),
             "n": self._build_replacing_func("<br>"),
             "=": self._build_linking_func("a", "href"),
-            "I": self._build_linking_func("img", "src", False)
+            "I": self._build_linking_func("img", "src", True)
         }
         self._metadata = {
             self._TITLE_KEY: "Untitled",
             self._DESC_KEY: "",
-            self._DATE_KEY: dateutil.display_time(self._date_format),
+            self._DATE_KEY: dateutil.display_time(dateutil.STR_TO_DATE_FMT),
             self._AUTHOR_KEY: "Anon"
         }
 
@@ -57,15 +57,13 @@ class HTMLRenderer:
             return content
         return replacer
 
-    def _build_linking_func(self, tag, property, is_closed=True):
+    def _build_linking_func(self, tag, property, is_open=False):
         def linker(text):
-            split = text.split(self._CONTENT_SEP)
-            link = split[0]
-            content = self._CONTENT_SEP.join(split[1:])
-            if is_closed:
-                return f"<{tag} {property}=\"{link}\">{content}</{tag}>"
-            else:
+            link, *remainder = text.split(self._CONTENT_SEP)
+            content = self._CONTENT_SEP.join(remainder[1:])
+            if is_open:
                 return f"<{tag} {property}=\"{link}\" alt=\"{content}\">"
+            return f"<{tag} {property}=\"{link}\">{content}</{tag}>"
         return linker
 
     def _build_metadata_func(self, key):
@@ -82,10 +80,9 @@ class HTMLRenderer:
         for split_line in split_lines:
             self._current_line += 1
             result = self._evaluate_line(split_line)
-            if len(result) == 0:
-                continue
-            rendered = self._render_metadata(result)
-            output.append(rendered)
+            if len(result) > 0:
+                rendered = self._render_metadata(result)
+                output.append(rendered)
         content = "\n".join(output)
         return self._build_html_doc(content)
 
@@ -93,19 +90,19 @@ class HTMLRenderer:
         output = []
         with open(path, "r") as file:
             for line in file.readlines():
-                clean = line.strip().split(self._CONTENT_SEP)
-                output.append(clean)
+                split = line.strip().split(self._CONTENT_SEP)
+                output.append(split)
         return output
 
-    def _evaluate_line(self, line):
-        starter = line[0]
+    def _evaluate_line(self, split_line):
+        starter = split_line[0]
         if starter == self._COMMENT_MARKER:
             return ""
         elif starter.startswith(self._OPERATOR_MARKER):
-            operator, *content = line
+            operator, *content = split_line
             return self._perform_operation_on(operator, content)
         else:
-            return self._CONTENT_SEP.join(line)
+            return self._CONTENT_SEP.join(split_line)
 
     def _build_html_doc(self, content):
         title = self._metadata[self._TITLE_KEY]
@@ -119,12 +116,11 @@ class HTMLRenderer:
     def _perform_operation_on(self, operator, content):
         output = self._CONTENT_SEP.join(content)
         for op_code in operator[1:]:
-            try:
-                operation = self._OPERATIONS[op_code]
-                output = operation(output)
-            except KeyError:
+            if op_code not in self._OPERATIONS:
                 msg = self._INV_OP_ERR_MSG.format(self._current_line, op_code)
                 raise ValueError(msg)
+            operation = self._OPERATIONS[op_code]
+            output = operation(output)
         return output
 
     def _render_metadata(self, text):

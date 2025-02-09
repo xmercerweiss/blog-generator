@@ -1,9 +1,12 @@
-import ioutil
+from datetime import datetime as dt
+
+from . import ioutil
 
 
 class HTMLDocument:
 
     _INV_STR_ERR_MSG = "Invalid string given"
+    _INV_DATE_ERR_MSG = "Invalid date given"
 
     def __init__(self, title=None, desc=None, date=None, author=None):
         self._title = title
@@ -39,8 +42,8 @@ class HTMLDocument:
 
     @date.setter
     def date(self, value):
-        if not isinstance(value, str):
-            raise ValueError(self._INV_STR_ERR_MSG)
+        if not isinstance(value, dt):
+            raise ValueError(self._INV_DATE_ERR_MSG)
         self._date = value
 
     @property

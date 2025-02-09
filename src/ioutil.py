@@ -11,10 +11,9 @@ def read_conf_file(path):
     with open(path, "r") as file:
         for line in file.readlines():
             stripped = line.strip()
-            if len(stripped) == 0:
-                continue
-            key, value = stripped.split(CONFIG_SEP)
-            output[key] = interpret_string(value)
+            if len(stripped) > 0:
+                key, value = stripped.split(CONFIG_SEP)
+                output[key] = interpret_string(value)
     return output
 
 
