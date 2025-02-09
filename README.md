@@ -16,13 +16,9 @@
 | Token | Value |
 | - | - |
 | #! | The entry's title, "Untitled" by default |
-| #? | The entry's date* |
+| #? | The entry's date, "Dec. 31st, 9999" by default |
 | #$ | The entry's description, blank by default |
 | #@ | The entry's author, "Anon" by default |
-
-*NOTE: When left unset, the date of the entry will be defined as the date the program
-is converting the markdown document into HTML, _not_ necessarily the date it was written.
-All dates must be entered in YYYY-MM-dd format.
 
 ## Operations
 Below is a table of tokens which represent operations/formatting within the defined 
@@ -109,5 +105,4 @@ on the server from the script. Below is a table of all needed configuration valu
 | _index_template_ | The local path to the template for the entry index page. (such as `./templates/blog_index.html`) |
 | _entry_dest_ | The folder within which entry webpages will be saved. (such as `./blog/entries`) |
 | _entry_template_ | The local path to the template for entry webpages. (such as `/templates/blog_entry.html`)
-| _date_format_ | The format for _displaying_ dates, based on the [Python](https://strftime.org/) standard. Note that all dates input in the markdown must follow the format `YYYY-MM-dd` |
 | _expand_tabs_ | Boolean, should tabs be converted to spaces? Tabs are assumed to be 4 spaces. |

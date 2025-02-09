@@ -1,4 +1,4 @@
-import dateutil
+from documents import HTMLDocument
 
 
 class HTMLRenderer:
@@ -15,8 +15,7 @@ class HTMLRenderer:
 
     _INV_OP_ERR_MSG = "{}: Invalid operator \"{}\" provided. Did you make a typo?"
 
-    def __init__(self, date_format=dateutil.DATE_TO_STR_FMT):
-        self._date_format = date_format
+    def __init__(self):
         self._current_line = 0
 
         self._OPERATIONS = {
@@ -42,7 +41,7 @@ class HTMLRenderer:
         self._metadata = {
             self._TITLE_KEY: "Untitled",
             self._DESC_KEY: "",
-            self._DATE_KEY: dateutil.display_time(self._date_format),
+            self._DATE_KEY: "Dec. 31st, 9999",
             self._AUTHOR_KEY: "Anon"
         }
 
@@ -83,7 +82,7 @@ class HTMLRenderer:
             content = self._evaluate_line(split_line)
             if len(content) == 0:
                 continue
-            rendered = self._insert_metadata(content)
+            rendered = self._render_metadata(content)
             output.append(rendered)
         return "\n".join(output)
 
@@ -116,10 +115,9 @@ class HTMLRenderer:
                 raise ValueError(msg)
         return output
 
-    def _insert_metadata(self, text):
+    def _render_metadata(self, text):
         output = text
         for key, value in self._metadata.items():
-            value = dateutil.display_time(self._date_format, value) if key == self._DATE_KEY else value
             metadata_char = self._OPERATOR_MARKER + key
             output = output.replace(metadata_char, value)
         return output
