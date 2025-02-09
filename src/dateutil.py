@@ -7,8 +7,7 @@ DATE_TO_STR_FMT = "%b. %d, %Y"
 date_of_runtime = dt.now()
 
 
-def display_time(date=date_of_runtime, fmt=DATE_TO_STR_FMT):
+def display_time(fmt, date=date_of_runtime):
     if isinstance(date, str):
         date = dt.strptime(date, STR_TO_DATE_FMT)
-    date_string = date.strftime(fmt)
-    return date_string.replace(" 0", " ")
+    return date.strftime(fmt)

@@ -4,3 +4,6 @@ index_path=
 entry_dest=
 index_template=
 entry_template=
+
+date_format=%b. %d, %Y
+expand_tabs=true

@@ -15,7 +15,8 @@ class HTMLRenderer:
 
     _INV_OP_ERR_MSG = "Invalid operator \"{}\" provided. Did you make a typo?"
 
-    def __init__(self):
+    def __init__(self, date_format=dateutil.DATE_TO_STR_FMT):
+        self._date_format = date_format
         self._OPERATIONS = {
             self._TITLE_KEY: self._build_metadata_func(self._TITLE_KEY),
             self._DESC_KEY: self._build_metadata_func(self._DESC_KEY),
@@ -39,7 +40,7 @@ class HTMLRenderer:
         self._metadata = {
             self._TITLE_KEY: "Untitled",
             self._DESC_KEY: "",
-            self._DATE_KEY: dateutil.display_time(),
+            self._DATE_KEY: dateutil.display_time(self._date_format),
             self._AUTHOR_KEY: "Anon"
         }
 
@@ -110,7 +111,7 @@ class HTMLRenderer:
     def _insert_metadata(self, text):
         output = text
         for key, value in self._metadata.items():
-            value = dateutil.display_time(value) if key == self._DATE_KEY else value
+            value = dateutil.display_time(self._date_format, value) if key == self._DATE_KEY else value
             metadata_char = self._SPECIAL_CHAR + key
             output = output.replace(metadata_char, value)
         return output

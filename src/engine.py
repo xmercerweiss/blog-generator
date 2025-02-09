@@ -12,6 +12,7 @@ class DocumentEngine:
     _OUTPUT_FORMAT_KEY = "entry_filename_format"
     _OUTPUT_DEST_KEY = "entry_dest"
     _OUTPUT_TEMP_PATH_KEY = "entry_template"
+    _DATE_FORMAT_KEY = "date_format"
     _EXPAND_TABS_KEY = "expand_tabs"
 
     _TAB_WIDTH = 4
@@ -27,8 +28,11 @@ class DocumentEngine:
         with open(path, "w") as file:
             file.write(content)
 
+    # I don't like unpacking all the config values
+    # in the init like this, but it's less verbose and
+    # more readable than referencing the dict values
+    # directly. Forgive me.
     def __init__(self, config_path):
-        self._parser = HTMLRenderer()
         self._config = ioutil.read_conf_file(config_path)
         self._domain_format = self._config[self._DOMAIN_FORMAT_KEY]
         self._index_path = self._config[self._INDEX_PATH_KEY]
@@ -36,7 +40,10 @@ class DocumentEngine:
         self._output_format = self._config[self._OUTPUT_FORMAT_KEY]
         self._output_destination = self._config[self._OUTPUT_DEST_KEY]
         self._ouput_template_path = self._config[self._OUTPUT_TEMP_PATH_KEY]
+        self._date_format = self._config[self._DATE_FORMAT_KEY]
         self._expand_tabs = self._config[self._EXPAND_TABS_KEY]
+
+        self._parser = HTMLRenderer(self._date_format)
 
     def process(self, markdown_paths):
         for path in markdown_paths:
