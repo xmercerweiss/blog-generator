@@ -1,4 +1,4 @@
-# blog-generator
+ # blog-generator
  A Python script which converts a custom markdown document into a static HTML blog entry.
 
  This program is meant to be run locally on your web server in order to generate static
@@ -6,6 +6,32 @@
  It must be provided an HTML template for both your blog index page and each entry's 
  webpage. The given markdown document is only converted into the HTML content of the
  entry itself. (i.e. title, paragraphs, etc.)
+
+ ## Overview
+ This program will generate an index page, listing the titles of each entry in order,
+ and generate the webpages for each entry. The index will automatically link to each entry
+ from its title. Templates must be given, via the `CONF` file, for both the index and
+ the entries. (One template will be used by all entries.)
+
+ Each template must be a valid HTML document with `#CONTENT#` in place of where the content
+ will be listed. The index's content will be an ordered list of links to the entries,
+ while each entry's content will be the HTML rendered from its associated markdown 
+ file. The structure of this markdown is covered in the sections below.
+
+ To execute the program, ideally on your webserver through SSH, download this project and call...
+ ```bash
+ python3 src/main.py <markdown files>
+ ```
+
+ For instance, to convert all `.blog` files in the current directory, you would call...
+ ```bash
+ python3 src/main.py ./*.blog
+ ```
+
+ Please note that you may need to substitute `python3` for the appropriate command for your
+ server's setup, and all paths must be changed to reflect your server's environment. It's 
+ suggested that you alias the command needed to feed the contents of an `entries/` directory 
+ into the program automatically.
 
  ## Metadata
  Below is a table of tokens which represent metadata within the defined markdown script.
@@ -16,9 +42,13 @@
 | Token | Value |
 | - | - |
 | #! | The entry's title, "Untitled" by default |
-| #? | The entry's date, "Dec. 31st, 9999" by default |
+| #? | The entry's date* |
 | #$ | The entry's description, blank by default |
 | #@ | The entry's author, "Anon" by default |
+
+*NOTE: When left unset, the date of the entry will be defined as the date the program
+is converting the markdown document into HTML, _not_ necessarily the date it was written.
+All dates must be entered in YYYY-MM-dd format.
 
 ## Operations
 Below is a table of tokens which represent operations/formatting within the defined 
@@ -105,4 +135,5 @@ on the server from the script. Below is a table of all needed configuration valu
 | _index_template_ | The local path to the template for the entry index page. (such as `./templates/blog_index.html`) |
 | _entry_dest_ | The folder within which entry webpages will be saved. (such as `./blog/entries`) |
 | _entry_template_ | The local path to the template for entry webpages. (such as `/templates/blog_entry.html`)
+| _date_format_ | The format for _displaying_ dates, based on the [Python](https://strftime.org/) standard. Note that all dates listed in the markdown must follow the format `YYYY-MM-dd` |
 | _expand_tabs_ | Boolean, should tabs be converted to spaces? Tabs are assumed to be 4 spaces. |

@@ -1,3 +1,5 @@
+import ioutil
+
 
 class HTMLDocument:
 
@@ -59,3 +61,6 @@ class HTMLDocument:
         if not isinstance(value, str):
             raise ValueError(self._INV_STR_ERR_MSG)
         self._content = value
+
+    def export_to(self, path):
+        ioutil.write_to_file(path, self._content)
