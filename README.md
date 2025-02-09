@@ -82,7 +82,7 @@ This document would be converted to the following HTML.
 ```html
 <h1>An example page...</h1>
 <h3><em>This is an example of the blog-generator markdown script</em></hr>
-<h4>Published on Feb. 4th, 2025 by Xavier Mercerweiss</h4>
+<h4>Published on Feb. 4, 2025 by Xavier Mercerweiss</h4>
 
 <hr>
 
