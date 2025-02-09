@@ -5,18 +5,20 @@ class HTMLRenderer:
 
     _CONTENT_SEP = " "
 
-    _SPECIAL_CHAR = "#"
-    _COMMENT_CHAR = _SPECIAL_CHAR*2
+    _OPERATOR_MARKER = "#"
+    _COMMENT_MARKER = _OPERATOR_MARKER*2
 
     _TITLE_KEY = "!"
     _DESC_KEY = "$"
     _DATE_KEY = "?"
     _AUTHOR_KEY = "@"
 
-    _INV_OP_ERR_MSG = "Invalid operator \"{}\" provided. Did you make a typo?"
+    _INV_OP_ERR_MSG = "{}: Invalid operator \"{}\" provided. Did you make a typo?"
 
     def __init__(self, date_format=dateutil.DATE_TO_STR_FMT):
         self._date_format = date_format
+        self._current_line = 0
+
         self._OPERATIONS = {
             self._TITLE_KEY: self._build_metadata_func(self._TITLE_KEY),
             self._DESC_KEY: self._build_metadata_func(self._DESC_KEY),
@@ -49,9 +51,9 @@ class HTMLRenderer:
             return f"<{tag}>{content}</{tag}>"
         return tagger 
 
-    def _build_replacing_func(self, new):
+    def _build_replacing_func(self, content):
         def replacer(*_):
-            return new
+            return content
         return replacer
 
     def _build_linking_func(self, tag, property, is_closed=True):
@@ -74,14 +76,11 @@ class HTMLRenderer:
 
     def to_html(self, path):
         output = []
-        lines = self._get_split_lines(path)
-        for line in lines:
-            if line[0] == self._COMMENT_CHAR:
-                continue
-            elif line[0].startswith(self._SPECIAL_CHAR):
-                content = self._evaluate_line(*line)
-            else:
-                content = self._CONTENT_SEP.join(line)
+        self._current_line = 0
+        split_lines = self._get_split_lines(path)
+        for split_line in split_lines:
+            self._current_line += 1
+            content = self._evaluate_line(split_line)
             if len(content) == 0:
                 continue
             rendered = self._insert_metadata(content)
@@ -96,15 +95,24 @@ class HTMLRenderer:
                 output.append(clean)
         return output
 
-    def _evaluate_line(self, *line):
-        operator, *content = line
+    def _evaluate_line(self, line):
+        starter = line[0]
+        if starter == self._COMMENT_MARKER:
+            return ""
+        elif starter.startswith(self._OPERATOR_MARKER):
+            operator, *content = line
+            return self._perform_operation_on(operator, content)
+        else:
+            return self._CONTENT_SEP.join(line)
+
+    def _perform_operation_on(self, operator, content):
         output = self._CONTENT_SEP.join(content)
-        for op in operator[1:]:
+        for op_code in operator[1:]:
             try:
-                operation = self._OPERATIONS[op]
+                operation = self._OPERATIONS[op_code]
                 output = operation(output)
             except KeyError:
-                msg = self._INV_OP_ERR_MSG % op
+                msg = self._INV_OP_ERR_MSG.format(self._current_line, op_code)
                 raise ValueError(msg)
         return output
 
@@ -112,6 +120,6 @@ class HTMLRenderer:
         output = text
         for key, value in self._metadata.items():
             value = dateutil.display_time(self._date_format, value) if key == self._DATE_KEY else value
-            metadata_char = self._SPECIAL_CHAR + key
+            metadata_char = self._OPERATOR_MARKER + key
             output = output.replace(metadata_char, value)
         return output

@@ -23,11 +23,6 @@ class DocumentEngine:
     _INV_ENTRY_TEMP_ERR_MSG = \
             f"Given entry template does not include content placeholder \"{_PLACEHOLDER}\"; check file path?"
 
-    @staticmethod
-    def _write_to_file(path, content):
-        with open(path, "w") as file:
-            file.write(content)
-
     # I don't like unpacking all the config values
     # in the init like this, but it's less verbose and
     # more readable than referencing the dict values
@@ -51,7 +46,7 @@ class DocumentEngine:
             template = self._get_html_template()
             html = self._insert_html_content(content, template)
             output_path = self._generate_output_filepath(path)
-            self._write_to_file(output_path, html)
+            ioutil.write_to_file(output_path, html)
             # Get title of entry, save to ordered list
             # Generate url to output file
             # Create ordered association between title and url
@@ -60,16 +55,18 @@ class DocumentEngine:
 
     def _get_html_template(self):
         with open(self._ouput_template_path, "r") as file:
-            return file.read()
+            template = file.read()
+        if template.find(self._PLACEHOLDER) < 0:
+            raise ValueError(self._INV_ENTRY_TEMP_ERR_MSG)
+        else:
+            return template
 
     def _insert_html_content(self, content, template):
-            if template.find(self._PLACEHOLDER) < 0:
-                raise ValueError(self._INV_ENTRY_TEMP_ERR_MSG)
             tabs = self._count_tabs_before(self._PLACEHOLDER, template)
             tabbed_content = content.replace("\n", f"\n{self._TAB*tabs}")
-            inserted = template.replace(self._PLACEHOLDER, tabbed_content)
-            output = self._expand_tabs_in(inserted) if self._expand_tabs \
-                else self._contract_tabs_in(inserted)
+            result = template.replace(self._PLACEHOLDER, tabbed_content)
+            output = self._expand_tabs_in(result) if self._expand_tabs \
+                else self._contract_tabs_in(result)
             return output
 
     def _generate_output_filepath(self, input_path):

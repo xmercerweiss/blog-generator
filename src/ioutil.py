@@ -18,12 +18,17 @@ def read_conf_file(path):
     return output
 
 
-def interpret_string(str):
+def interpret_string(s):
     try:
-        n = int(str)
+        n = int(s)
         return n
     except ValueError:
-        lower = str.lower().strip()
+        lower = s.lower().strip()
         if lower in TRUTH_VALUES:
             return lower == TRUE_STR
-        return str
+        return s
+
+
+def write_to_file(path, content):
+    with open(path, "w") as file:
+        file.write(content)
