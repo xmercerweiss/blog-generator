@@ -136,4 +136,5 @@ on the server from the script. Below is a table of all needed configuration valu
 | _entry_dest_ | The folder within which entry webpages will be saved. (such as `./blog/entries`) |
 | _entry_template_ | The local path to the template for entry webpages. (such as `/templates/blog_entry.html`)
 | _date_format_ | The format for _displaying_ dates, based on the [Python](https://strftime.org/) standard. Note that all dates listed in the markdown must follow the format `YYYY-MM-dd` |
+| _newest_first_ | Boolean, should entries be listed newest-first in the index? |
 | _expand_tabs_ | Boolean, should tabs be converted to spaces? Tabs are assumed to be 4 spaces. |

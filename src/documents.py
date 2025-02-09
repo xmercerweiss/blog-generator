@@ -11,6 +11,7 @@ class HTMLDocument:
         self._date = date
         self._author = author
         self._content = None
+        self._url = None
 
     @property
     def title(self):
@@ -61,6 +62,16 @@ class HTMLDocument:
         if not isinstance(value, str):
             raise ValueError(self._INV_STR_ERR_MSG)
         self._content = value
+
+    @property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, value):
+        if not isinstance(value, str):
+            raise ValueError(self._INV_STR_ERR_MSG)
+        self._url = value
 
     def export_to(self, path):
         ioutil.write_to_file(path, self._content)

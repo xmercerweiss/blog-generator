@@ -6,4 +6,5 @@ index_template=
 entry_template=
 
 date_format=%b. %d, %Y
+newest_first=true
 expand_tabs=true
