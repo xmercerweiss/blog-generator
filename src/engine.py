@@ -56,7 +56,7 @@ class DocumentEngine:
             doc.url = self._generate_entry_url(entry_path)
             insort(docs_by_date, doc, key=lambda d: d.date)
             doc.export_to(entry_path)
-        if self._newest_first:
+        if not self._newest_first:
              docs_by_date.reverse()
         index = self._generate_html_index_of(docs_by_date)
         index.export_to(self._index_path)
